@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questverse Play — Independent Game Studio</title>
+    <style>
+        :root {
+            --paper: #faf8f3;
+            --ink: #1c1a17;
+            --muted: #6f6a60;
+            --rule: #e3ded4;
+            --green: #14532d;
+            --clay: #b45309;
+            --card: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.78;
+            -webkit-font-smoothing: antialiased;
+        }
+        .serif { font-family: Georgia, "Times New Roman", "Songti SC", "SimSun", serif; }
+        .wrap { max-width: 880px; margin: 0 auto; padding: 0 32px; }
+
+        /* masthead */
+        .masthead { border-bottom: 2px solid var(--ink); margin-top: 32px; padding-bottom: 14px; }
+        .masthead .row { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .masthead .name { font-family: Georgia, "Times New Roman", serif; font-size: 26px; font-weight: 700; letter-spacing: -0.3px; }
+        .masthead .est { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); }
+
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 0; border-bottom: 1px solid var(--rule); }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; margin-right: 26px; transition: color .2s; }
+        .nav-links a:hover { color: var(--clay); }
+        .nav-rss { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green); font-weight: 700; }
+
+        .hero { padding: 64px 0 56px; border-bottom: 1px solid var(--rule); }
+        .kicker { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--clay); margin-bottom: 18px; }
+        h1 { font-family: Georgia, "Times New Roman", "Songti SC", serif; font-size: clamp(38px, 5.6vw, 58px); font-weight: 400; line-height: 1.12; letter-spacing: -0.6px; margin-bottom: 22px; }
+        h1 em { font-style: italic; color: var(--green); }
+        .hero p.lede { font-size: 18px; color: var(--muted); max-width: 620px; margin-bottom: 28px; }
+        .hero p.lede::first-letter { font-family: Georgia, serif; font-size: 300%; float: left; line-height: .82; padding: 6px 10px 0 0; color: var(--clay); }
+        .cta { display: inline-flex; gap: 16px; }
+        a.btn { padding: 12px 24px; font-weight: 700; font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--ink); transition: background .18s, color .18s; }
+        a.btn.solid { background: var(--ink); color: var(--paper); }
+        a.btn.solid:hover { background: var(--green); border-color: var(--green); }
+        a.btn.ghost { color: var(--ink); background: transparent; }
+        a.btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+        section { padding: 50px 0; border-bottom: 1px solid var(--rule); }
+        .tag { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--clay); margin-bottom: 12px; }
+        h2 { font-family: Georgia, "Times New Roman", "Songti SC", serif; font-size: 30px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 18px; }
+        section > p.lead { color: var(--muted); font-size: 16px; max-width: 640px; margin-bottom: 24px; }
+
+        .about-row { padding: 16px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 180px 1fr; gap: 20px; }
+        .about-row:last-child { border-bottom: none; }
+        .about-row strong { font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: var(--green); }
+        .about-row span { font-size: 14px; color: var(--muted); }
+        @media (max-width: 600px) { .about-row { grid-template-columns: 1fr; gap: 4px; } }
+
+        .game { padding: 20px 0; border-bottom: 1px solid var(--rule); }
+        .game:last-child { border-bottom: none; }
+        .game-name { font-family: Georgia, serif; font-size: 21px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
+        .status { font-size: 10px; font-weight: 700; padding: 3px 10px; letter-spacing: 1.2px; text-transform: uppercase; font-family: "Inter", sans-serif; }
+        .status.live { color: var(--green); border: 1px solid #bcd6c4; background: #eef6f0; }
+        .status.soon { color: var(--clay); border: 1px solid #f0d6b4; background: #fdf4e8; }
+        .game-desc { font-size: 14px; color: var(--muted); }
+
+        .values { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border-top: 1px solid var(--rule); }
+        @media (max-width: 620px) { .values { grid-template-columns: 1fr; } }
+        .value { padding: 24px 24px 24px 0; border-bottom: 1px solid var(--rule); }
+        .value:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 24px; }
+        .value:nth-child(even) { padding-left: 24px; }
+        .value .n { font-family: Georgia, serif; font-size: 13px; font-weight: 700; color: var(--clay); margin-bottom: 8px; }
+        .value-title { font-family: Georgia, serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+        .value-desc { font-size: 14px; color: var(--muted); }
+
+        .update { padding: 14px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 150px 1fr; gap: 18px; }
+        .update:last-child { border-bottom: none; }
+        .update-date { font-size: 11px; font-weight: 700; color: var(--clay); letter-spacing: 1.2px; text-transform: uppercase; }
+        .update-text { font-size: 15px; color: #3d3a34; }
+        @media (max-width: 600px) { .update { grid-template-columns: 1fr; gap: 2px; } }
+
+        .faq { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+        .faq:last-child { border-bottom: none; }
+        .faq-q { font-family: Georgia, serif; font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+        .faq-a { font-size: 14px; color: var(--muted); }
+
+        .contact-block { margin-top: 20px; padding: 28px; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+        .contact-line { font-size: 15px; color: #3d3a34; margin-bottom: 8px; }
+        .contact-line a { color: var(--green); text-decoration: none; font-weight: 600; }
+        .contact-line a:hover { text-decoration: underline; }
+
+        footer { padding: 40px 0 56px; color: var(--muted); font-size: 12px; }
+        .footer-links { margin-bottom: 10px; }
+        .footer-links a { color: var(--muted); text-decoration: none; margin-right: 20px; text-transform: uppercase; letter-spacing: 1.2px; font-size: 11px; font-weight: 600; }
+        .footer-links a:hover { color: var(--clay); }
+
+        @media (max-width: 640px) {
+            .nav-links a { margin-right: 14px; font-size: 11px; letter-spacing: 1px; }
+            .hero { padding: 44px 0 40px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="masthead">
+            <div class="row">
+                <div class="name">Questverse Play</div>
+                <div class="est">Independent Game Studio</div>
+            </div>
+        </div>
+
+        <nav>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#games">Games</a>
+                <a href="#values">Values</a>
+                <a href="#updates">Updates</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="nav-rss">Est. 2026</div>
+        </nav>
+
+        <header class="hero">
+            <div class="kicker">The Studio Journal</div>
+            <h1>Worlds worth <em>wandering</em>, stories worth telling.</h1>
+            <p class="lede">Questverse Play is an independent game studio building rich, story-driven worlds — crafted with care, one detail at a time.</p>
+            <div class="cta">
+                <a class="btn solid" href="#games">View the games</a>
+                <a class="btn ghost" href="#contact">Write to us</a>
+            </div>
+        </header>
+
+        <section id="about">
+            <div class="tag">About</div>
+            <h2>Who we are</h2>
+            <p class="lead">Questverse Play is a small studio with a long view. We build games the way good stories are written — patiently, deliberately, and with attention to every chapter.</p>
+            <div class="about-row"><strong>Our Mission</strong><span>To craft immersive, story-rich games that players remember long after the credits roll.</span></div>
+            <div class="about-row"><strong>Our Approach</strong><span>Careful worldbuilding, thoughtful pacing, and polish on every screen.</span></div>
+            <div class="about-row"><strong>Our Audience</strong><span>Players who read, explore, and love a world with depth.</span></div>
+        </section>
+
+        <section id="games">
+            <div class="tag">Our Games</div>
+            <h2>What we've made</h2>
+            <div class="game">
+                <div class="game-name">Quest Verse <span class="status live">Live</span></div>
+                <div class="game-desc">Our flagship title — a story-rich adventure built for players who love to explore.</div>
+            </div>
+            <div class="game">
+                <div class="game-name">More chapters <span class="status soon">In Development</span></div>
+                <div class="game-desc">New worlds are being written. The next chapter is on its way.</div>
+            </div>
+        </section>
+
+        <section id="values">
+            <div class="tag">Principles</div>
+            <h2>What we believe</h2>
+            <div class="values">
+                <div class="value"><div class="n">I.</div><div class="value-title">Story Above All</div><div class="value-desc">Narrative is the spine of everything we build.</div></div>
+                <div class="value"><div class="n">II.</div><div class="value-title">Worlds with Depth</div><div class="value-desc">Places that reward curiosity and repay attention.</div></div>
+                <div class="value"><div class="n">III.</div><div class="value-title">Craft &amp; Patience</div><div class="value-desc">We take the time to get the details right.</div></div>
+                <div class="value"><div class="n">IV.</div><div class="value-title">Respect the Player</div><div class="value-desc">Fair, honest design — never a waste of your time.</div></div>
+            </div>
+        </section>
+
+        <section id="updates">
+            <div class="tag">Dispatches</div>
+            <h2>What's new</h2>
+            <div class="update"><div class="update-date">September 2026</div><div class="update-text">Quest Verse is live — the first chapter is open to all.</div></div>
+            <div class="update"><div class="update-date">August 2026</div><div class="update-text">The studio is expanding its universe. New chapters in development.</div></div>
+        </section>
+
+        <section id="faq">
+            <div class="tag">Questions</div>
+            <h2>Common questions</h2>
+            <div class="faq"><div class="faq-q">Are your games free to play?</div><div class="faq-a">Yes — free to download and play, supported by optional ads and in-game purchases.</div></div>
+            <div class="faq"><div class="faq-q">Do you collect my personal data?</div><div class="faq-a">Only the minimum needed to run and improve our games. See our Privacy Policy for details.</div></div>
+            <div class="faq"><div class="faq-q">Can I partner or collaborate with you?</div><div class="faq-a">We're always happy to hear from players and partners — write to us below.</div></div>
+            <div class="faq"><div class="faq-q">How do I report a problem?</div><div class="faq-a">Email us and we'll look into it as soon as we can. Your feedback makes our games better.</div></div>
+        </section>
+
+        <section id="contact">
+            <div class="tag">Contact</div>
+            <h2>Write to us</h2>
+            <p class="lead">Questions, feedback, or business inquiries — we'd love to hear from you.</p>
+            <div class="contact-block">
+                <div class="contact-line">Questverse Play</div>
+                <div class="contact-line">Email: <a href="mailto:jayaflazz@gmail.com">jayaflazz@gmail.com</a></div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+            </div>
+            <div>&copy; 2026 Questverse Play. All rights reserved.</div>
+        </footer>
+    </div>
+</body>
+</html>
